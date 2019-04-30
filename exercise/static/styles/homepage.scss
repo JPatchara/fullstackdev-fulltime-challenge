@@ -1,0 +1,50 @@
+[class="logo"] {
+    position: relative;
+    width: 22vw;
+    height: auto;
+    transform: translate(65%, -55%);
+}
+[id="content"] {
+    position: absolute;
+    width: 100%;
+    top: 9%;
+    height: 91%;
+    margin: auto;
+    list-style: none;
+}
+[id="content"] h1 {
+    margin-left: 19vw;
+    margin-bottom: 20vh;
+    text-shadow: .5vmin .4vmin #c0ac53; 
+}
+[class="advertise"] {
+    position: relative;
+    transform: translate(-15vw, 25vh);
+}
+[id="content"] li::before {
+    content: "\2022";
+    color: green;
+    font-weight: bold;
+    display: inline-block; 
+    width: 2vw;
+    margin-left: 14.5vw;
+}
+[id="namingPart"] {
+    transform: translate(5vw, -8vh);
+    height: 35vh;
+    background-color: rgba($color: #2f89c5b0, $alpha: .4);
+    border-radius: 3vmin 3vmin 28vmin 3vmin;
+}
+[class="namingTitle"] {
+    transform: translate(3vw, 5vh);
+}
+[class="namingTitle"] span {
+    font-size: 3vmin;
+    font-style: bold;
+}
+[id="findBTN"] {
+    position: absolute;
+    width: 35.5vw;
+    left: 4.3vw;
+    bottom: 8vh;
+}
