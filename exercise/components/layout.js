@@ -5,7 +5,7 @@ import Header from './header';
 const Layout = (props) => (
     <div className="background">
         <Head>
-            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+            <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
             <meta charSet="utf-8" />
             <link rel="stylesheet" 
                 href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 

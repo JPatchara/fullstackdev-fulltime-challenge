@@ -1,0 +1,86 @@
+[id="lockerArea"] {
+    transform: translate(0, 11%);
+    list-style: none;
+    padding: 0;
+}
+[id="size"] {
+    height: 10vh;
+}
+[id="sizeTXT"] {
+    font-size: 3vmin;
+    font-weight: bold;
+}
+[id="gap"] {
+    margin-left: 4vw;
+}
+[class="info"] {
+    font-size: 2.2vmin;
+}
+[id="locker"] {
+    height: 20vh;
+    background-color: rgba($color: #15a5e7e0, $alpha: 0.55)
+}
+[class="lockerNum"] {
+    float: left;
+    left: 0;
+}
+$status: 1vh 1vw 0 0;
+$pulseAnimation: 1s infinite;
+[class="greenPoint"] {
+    background-color: green;
+    width: 1vw;
+    height: 1.5vh;
+    border-radius: 1vmin;
+    margin: $status;
+    padding: 0;
+    float: left;
+    left: 0;
+    animation: shadow-pulse-green $pulseAnimation;
+}
+[class="redPoint"] {
+    background-color: rgb(202, 4, 4);
+    width: 1vw;
+    height: 1.5vh;
+    border-radius: 1vmin;
+    margin: $status;
+    padding: 0;
+    float: left;
+    left: 0;
+    animation: shadow-pulse-red $pulseAnimation;
+}
+@keyframes shadow-pulse-red
+{
+    0% {
+        box-shadow: 0 0 0 0vw rgba(228, 62, 62, 0.795);
+    }
+    25% {
+        box-shadow: 0 0 0 0.25vw rgba(211, 106, 106, 0.795);
+    }
+    50% {
+        box-shadow: 0 0 0 0.5vw rgba(207, 126, 126, 0.795);
+    }
+    75% {
+        box-shadow: 0 0 0 0.75vw rgba(190, 139, 139, 0.795);
+    }
+    100% {
+        box-shadow: 0 0 0 1vmin rgba(207, 171, 171, 0.548);
+    }
+}
+@keyframes shadow-pulse-green
+{
+    0% {
+        box-shadow: 0 0 0 0vw rgba(58, 209, 20, 0.795);
+    }
+    25% {
+        box-shadow: 0 0 0 0.25vw rgba(114, 221, 87, 0.795);
+    }
+    50% {
+        box-shadow: 0 0 0 0.5vw rgba(111, 224, 111, 0.795);
+    }
+    75% {
+        box-shadow: 0 0 0 0.75vw rgba(130, 202, 130, 0.795);
+    }
+    100% {
+        box-shadow: 0 0 0 1vmin rgba(166, 196, 159, 0.548);
+    }
+}
