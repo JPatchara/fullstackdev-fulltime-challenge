@@ -17,10 +17,6 @@
     margin-bottom: 20vh;
     text-shadow: .5vmin .4vmin #c0ac53; 
 }
-[class="advertise"] {
-    position: relative;
-    transform: translate(-15vw, 25vh);
-}
 [id="content"] li::before {
     content: "\2022";
     color: green;
@@ -29,22 +25,38 @@
     width: 2vw;
     margin-left: 14.5vw;
 }
-[id="namingPart"] {
-    transform: translate(5vw, -8vh);
+[id="optionsPart"] {
+    transform: translate(0, -8vh);
     height: 35vh;
     background-color: rgba($color: #2f89c5b0, $alpha: .4);
-    border-radius: 3vmin 3vmin 28vmin 3vmin;
+    border-radius: 3vmin 0vmin 22vmin 3vmin;
 }
-[class="namingTitle"] {
-    transform: translate(3vw, 5vh);
-}
-[class="namingTitle"] span {
-    font-size: 3vmin;
-    font-style: bold;
-}
-[id="findBTN"] {
+[id="storeBTN"] {
     position: absolute;
-    width: 35.5vw;
-    left: 4.3vw;
-    bottom: 8vh;
+    width: 17vw;
+    height: 24vh;
+    left: 3vw;
+    top: 5vh;
 }
+[class="buttonIcon"] {
+    width: 2.5vw;
+    height: 5vh;
+}
+[id="removeBTN"] {
+    position: absolute;
+    width: 17vw;
+    height: 24vh;
+    right: 12vw;
+    top: 5vh;
+}
+[class="advertise"] {
+    position: relative;
+    transform: translate(-15vw, 38vh);
+}
+// [class="namingTitle"] {
+//     transform: translate(3vw, 5vh);
+// }
+// [class="namingTitle"] span {
+//     font-size: 3vmin;
+//     font-style: bold;
+// }
