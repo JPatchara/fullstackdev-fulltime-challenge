@@ -22,8 +22,16 @@ class Locker extends React.Component {
                                 </button>
                             </div>
                             <div class="card-body">
-                                <h5 class="card-title">Customer: </h5>
-                                <p class="card-text">Please put your belonging in the locker before get the key.</p>
+                                <div className="input-group-prepend ml-4">
+                                    <h5 className="input-group-text px-4 bg-transparent text-dark border-0" id="inputGroup-sizing-default">
+                                        Customer Name:
+                                    </h5>
+                                </div>
+                                <input type="text" className="w-75 form-control border-warning ml-5" aria-label="Default" 
+                                    aria-describedby="inputGroup-sizing-default" 
+                                    placeholder="Type your name here."    
+                                />
+                                <br/><p class="card-text text-danger">Please put your belonging in the locker before get the key.</p>
                                 <a href="#" class="btn btn-primary">Get your key</a>
                             </div>
                             </div>

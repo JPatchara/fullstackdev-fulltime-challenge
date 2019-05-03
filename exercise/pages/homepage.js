@@ -13,7 +13,7 @@ class Homepage extends Component {
     }
 
     handleClickToCheckoutpage() {
-        // Router.push({ pathname: '/checkoutpage'})
+        Router.push({ pathname: '/checkoutpage'})
     }
 
     render() {
@@ -25,17 +25,6 @@ class Homepage extends Component {
                         <img className="logo" src={logo} alt=""/>
                     </div>
                     <div className="col-6" id="optionsPart">
-                        {/* <div className="namingTitle">
-                            <div className="input-group-prepend">
-                                <span className="input-group-text bg-transparent text-dark border-success border-bottom-0" id="inputGroup-sizing-default">
-                                    Customer Name:
-                                </span>
-                            </div>
-                            <input type="text" className="w-75 form-control border-success" aria-label="Default" 
-                                aria-describedby="inputGroup-sizing-default" 
-                                placeholder="Type your name here."    
-                            />
-                        </div> */}
                         <button type="button" className="btn btn-primary" id="storeBTN" onClick={() => this.handleClickToServicepage()}>
                             Checking<br/><br/>
                             <img className="buttonIcon" src={checkinIcon} alt="" />
