@@ -44,6 +44,7 @@ const connectionURL = 'mongodb+srv://JPatchara:Jin0835795068@coinlocker-ogp6o.mo
 
 mongoose.connect(connectionURL, {useNewUrlParser: true})
 var connection = mongoose.connection
+mongoose.set('useFindAndModify', false)
 
 //db status checking
 connection.on('connected', function() {

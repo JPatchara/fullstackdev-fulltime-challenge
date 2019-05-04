@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const lockerModel = new mongoose.Schema({
-    lockerID: { type: String },
+    lockerID: { type: Number },
     lockerSize: { type: String },
     selected: { type: Boolean, default: false },
     status: { type: String, required: true  },
