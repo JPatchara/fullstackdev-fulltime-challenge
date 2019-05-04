@@ -1,4 +1,5 @@
 const customerData = require('../models/customers')
+const nodemailer = require('nodemailer')
 
 //Get all customers data
 function listAll(req, res, report) {
@@ -28,5 +29,30 @@ function remove(req, res, report) {
         res.send(details)
     }).catch(report)
 }
+//Mailing a key to a customer
+function mailing(req, res, report) {
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'zafebox.coinlocker@gmail.com',
+            pass: 'zafebox@556'
+        }
+    })
 
-module.exports = { listAll, create, edit, remove }
+    var mailOptions = {
+        from: 'zafebox.coinlocker@gmail.com',
+        to: req.body.email,
+        subject: 'Your key(Zafebox coin locker)',
+        html: ''
+    }
+          
+    transporter.sendMail(mailOptions, function(err, info){
+        if (err) {
+            console.log(err);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    })
+}
+
+module.exports = { listAll, create, edit, remove, mailing }

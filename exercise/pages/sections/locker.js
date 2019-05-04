@@ -1,10 +1,32 @@
 import React from 'react'
 import '../../static/styles/locker.scss'
+import Keyservice from './keyservice'
+import axios from 'axios'
 
 class Locker extends React.Component {
     constructor(props) {
         super(props)
-        this.state = { }
+        this.state = {
+            customerName: '',
+            customerKey: '',
+            getKey: false,
+        }
+    }
+
+    randomCustomerKey(length) {
+        var chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
+        var lockerKey = ''
+        for (var x = 0; x < length; x++) {
+            var i = Math.floor(Math.random() * chars.length)
+            lockerKey += chars.charAt(i)
+        }
+        return lockerKey
+    }
+    
+    customerKeyGenerate() {
+        this.setState({ customerName: this.refs.name.value })
+        this.setState({ customerKey: this.randomCustomerKey(8) })
+        this.setState({ getKey: true })
     }
 
     render() {
@@ -15,8 +37,7 @@ class Locker extends React.Component {
                         <div className="lockerContent">
                         <div className="card rounded-lg text-center">
                             <div className="card-header text-left  bg-warning">
-                                Locker {this.props.locker}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                Size: {this.props.size}
+                                Locker No.{this.props.locker}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 <button type="button" className="close" aria-label="Close" onClick={this.props.onHide}>
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -28,16 +49,17 @@ class Locker extends React.Component {
                                     </h5>
                                 </div>
                                 <input type="text" className="w-75 form-control border-warning ml-5" aria-label="Default" 
-                                    aria-describedby="inputGroup-sizing-default" 
+                                    aria-describedby="inputGroup-sizing-default" ref="name"
                                     placeholder="Type your name here."    
                                 />
                                 <br/><p className="card-text text-danger">Please put your belonging in the locker before get the key.</p>
-                                <a href="#" className="btn btn-primary">Get your key</a>
+                                <button className="btn btn-primary" onClick={() => this.customerKeyGenerate()}>Get your key</button>
                             </div>
                             </div>
                         </div>
                     </div>
                 )}
+                <Keyservice show={this.state.getKey} customerKey={this.state.customerKey}/>
             </React.Fragment>
         )
     }

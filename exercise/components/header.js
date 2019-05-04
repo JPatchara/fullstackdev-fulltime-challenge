@@ -8,6 +8,7 @@ class Header extends React.Component {
     handleClickToHomepage() {
         Router.push({ pathname: '/'})
     }
+    
     render() {
         return(
             <div className="headerBG">

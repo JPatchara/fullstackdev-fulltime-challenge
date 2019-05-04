@@ -90,9 +90,7 @@ class Servicepage extends Component {
                             L
                         </div>
                         <div className="w-100"></div>
-                        <div className="col-2 h-50" id="gap">
-                            <p>Customer:</p>
-                        </div>
+                        <div className="col-2 h-50" id="gap"/>
                         <div className="col-2 text-center border border-dark" id="locker" style={{background: this.lockerStatus(1)}} onClick={() => this.lockerSelected(1)}>
                             <div className="lockerDetails">
                                 <p className="lockerNum">#1</p>
@@ -156,7 +154,7 @@ class Servicepage extends Component {
                         </div>
                     </div>
                 </div>
-                <Locker show={this.state.access} onHide={() => this.closeLocker()} locker={this.state.locker} size={this.state.size}/>
+                <Locker show={this.state.access} onHide={() => this.closeLocker()} locker={this.state.locker}/>
             </Layout>
         )
     }
