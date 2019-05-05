@@ -3,6 +3,10 @@ import '../../static/styles/locker.scss'
 import Keyservice from './keyservice'
 import axios from 'axios'
 
+export var mailingLockerID = ''
+export var mailingLockerSize = ''
+export var mailingCustomerName = ''
+
 class Locker extends React.Component {
     constructor(props) {
         super(props)
@@ -13,6 +17,7 @@ class Locker extends React.Component {
         }
     }
 
+    //characters random function with code length parameter
     randomCustomerKey(length) {
         var chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
         var lockerKey = ''
@@ -23,10 +28,31 @@ class Locker extends React.Component {
         return lockerKey
     }
     
-    customerKeyGenerate() {
-        this.setState({ customerName: this.refs.name.value })
-        this.setState({ customerKey: this.randomCustomerKey(8) })
-        this.setState({ getKey: true })
+    //using characters random function to create 8 character of key for a customer
+    //and keep necessary data for another process (mailing key & checking out)
+    async customerKeyGenerate() {
+        await this.setState({ customerName: this.refs.name.value })
+        await this.setState({ customerKey: this.randomCustomerKey(8) })
+        await this.setState({ getKey: true })
+
+        //create customer data to a database
+        await axios.post('/customer/create', {
+            customer: this.state.customerName,
+            lockerID: this.props.locker,
+            lockerKey: this.state.customerKey,
+            checkout: false
+        })
+        .then(function (response) {
+            console.log(response)
+        })
+        .catch(function (error) {
+            console.log(error)
+        })
+
+        //set data for mailing part
+        mailingLockerID = this.props.locker
+        mailingLockerSize = this.props.size
+        mailingCustomerName = this.refs.name.value
     }
 
     render() {

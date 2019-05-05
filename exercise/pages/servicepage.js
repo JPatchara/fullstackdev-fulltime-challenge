@@ -13,6 +13,8 @@ class Servicepage extends Component {
         this.state = {
             access: false,
             timestamp: null,
+            locker: 0,
+            size: '',
             lockerStatus: []
         }
     }
@@ -31,10 +33,9 @@ class Servicepage extends Component {
         .catch(function (error) {
             console.log(error);
         })
-        await console.log(this.state.lockerStatus)
     }
 
-    async lockerSelected(lockerNum) {
+    async lockerSelected(lockerNum, lockerSize) {
         if (this.state.lockerStatus[lockerNum] === false) {
             var date = new Date().toLocaleString("en-US", {timeZone: "Asia/Bangkok"})
             date = new Date(date)
@@ -43,6 +44,7 @@ class Servicepage extends Component {
 
             await this.setState({ access: true })
             await this.setState({ locker: lockerNum })
+            await this.setState({ size: lockerSize})
             
             await axios.put(
                 '/locker/update/'+lockerNum,
@@ -91,17 +93,17 @@ class Servicepage extends Component {
                         </div>
                         <div className="w-100"></div>
                         <div className="col-2 h-50" id="gap"/>
-                        <div className="col-2 text-center border border-dark" id="locker" style={{background: this.lockerStatus(1)}} onClick={() => this.lockerSelected(1)}>
+                        <div className="col-2 text-center border border-dark" id="locker" style={{background: this.lockerStatus(1)}} onClick={() => this.lockerSelected(1,'S')}>
                             <div className="lockerDetails">
                                 <p className="lockerNum">#1</p>
                                 <p>S01</p>
                             </div>
                         </div>
-                        <div className="col-3 text-center border border-dark" id="locker" style={{background: this.lockerStatus(2)}} onClick={() => this.lockerSelected(2)}>
+                        <div className="col-3 text-center border border-dark" id="locker" style={{background: this.lockerStatus(2)}} onClick={() => this.lockerSelected(2,'M')}>
                             <p className="lockerNum">#2</p>
                             <p>M01</p>
                         </div>
-                        <div className="col-4 text-center border border-dark" id="locker" style={{background: this.lockerStatus(3)}} onClick={() => this.lockerSelected(3)}>
+                        <div className="col-4 text-center border border-dark" id="locker" style={{background: this.lockerStatus(3)}} onClick={() => this.lockerSelected(3,'L')}>
                             <p className="lockerNum">#3</p>
                             <p>L01</p>
                         </div>
@@ -112,49 +114,49 @@ class Servicepage extends Component {
                             <div className="redPoint"/>
                             <p className="info">Taken</p>
                         </div>
-                        <div className="col-2 text-center border border-dark" id="locker" style={{background: this.lockerStatus(4)}} onClick={() => this.lockerSelected(4)}>
+                        <div className="col-2 text-center border border-dark" id="locker" style={{background: this.lockerStatus(4)}} onClick={() => this.lockerSelected(4,'S')}>
                             <p className="lockerNum">#4</p>
                             <p>S02</p>
                         </div>
-                        <div className="col-3 text-center border border-dark" id="locker" style={{background: this.lockerStatus(5)}} onClick={() => this.lockerSelected(5)}>
+                        <div className="col-3 text-center border border-dark" id="locker" style={{background: this.lockerStatus(5)}} onClick={() => this.lockerSelected(5,'M')}>
                             <p className="lockerNum">#5</p>
                             <p>M02</p>
                         </div>
-                        <div className="col-4 text-center border border-dark" id="locker" style={{background: this.lockerStatus(6)}} onClick={() => this.lockerSelected(6)}>
+                        <div className="col-4 text-center border border-dark" id="locker" style={{background: this.lockerStatus(6)}} onClick={() => this.lockerSelected(6,'L')}>
                             <p className="lockerNum">#6</p>
                             <p>L02</p>
                         </div>
                         <div className="w-100"></div>
                         <div className="col-2 h-50" id="gap"/>
-                        <div className="col-2 text-center border border-dark" id="locker" style={{background: this.lockerStatus(7)}} onClick={() => this.lockerSelected(7)}>
+                        <div className="col-2 text-center border border-dark" id="locker" style={{background: this.lockerStatus(7)}} onClick={() => this.lockerSelected(7,'S')}>
                             <p className="lockerNum">#7</p>
                             <p>S03</p>
                         </div>
-                        <div className="col-3 text-center border border-dark" id="locker" style={{background: this.lockerStatus(8)}} onClick={() => this.lockerSelected(8)}>
+                        <div className="col-3 text-center border border-dark" id="locker" style={{background: this.lockerStatus(8)}} onClick={() => this.lockerSelected(8,'M')}>
                             <p className="lockerNum">#8</p>
                             <p>M03</p>
                         </div>
-                        <div className="col-4 text-center border border-dark" id="locker" style={{background: this.lockerStatus(9)}} onClick={() => this.lockerSelected(9)}>
+                        <div className="col-4 text-center border border-dark" id="locker" style={{background: this.lockerStatus(9)}} onClick={() => this.lockerSelected(9,'L')}>
                             <p className="lockerNum">#9</p>
                             <p>L03</p>
                         </div>
                         <div className="w-100"></div>
                         <div className="col-2 h-50" id="gap"/>
-                        <div className="col-2 text-center border border-dark" id="locker" style={{background: this.lockerStatus(10)}} onClick={() => this.lockerSelected(10)}>
+                        <div className="col-2 text-center border border-dark" id="locker" style={{background: this.lockerStatus(10)}} onClick={() => this.lockerSelected(10,'S')}>
                             <p className="lockerNum">#10</p>
                             <p>S04</p>
                         </div>
-                        <div className="col-3 text-center border border-dark" id="locker" style={{background: this.lockerStatus(11)}} onClick={() => this.lockerSelected(11)}>
+                        <div className="col-3 text-center border border-dark" id="locker" style={{background: this.lockerStatus(11)}} onClick={() => this.lockerSelected(11,'M')}>
                             <p className="lockerNum">#11</p>
                             <p>M04</p>
                         </div>
-                        <div className="col-4 text-center border border-dark" id="locker" style={{background: this.lockerStatus(12)}} onClick={() => this.lockerSelected(12)}>
+                        <div className="col-4 text-center border border-dark" id="locker" style={{background: this.lockerStatus(12)}} onClick={() => this.lockerSelected(12,'L')}>
                             <p className="lockerNum">#12</p>
                             <p>L04</p>
                         </div>
                     </div>
                 </div>
-                <Locker show={this.state.access} onHide={() => this.closeLocker()} locker={this.state.locker}/>
+                <Locker show={this.state.access} onHide={() => this.closeLocker()} locker={this.state.locker} size={this.state.size}/>
             </Layout>
         )
     }

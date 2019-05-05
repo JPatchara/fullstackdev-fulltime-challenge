@@ -2,6 +2,7 @@ import React from 'react'
 import '../../static/styles/keyservice.scss'
 import axios from 'axios'
 import Router from 'next/router'
+import { mailingLockerID, mailingLockerSize, mailingCustomerName } from './locker'
 
 class Keyservice extends React.Component {
     constructor(props) {
@@ -9,9 +10,14 @@ class Keyservice extends React.Component {
         this.state = { }
     }
 
-    mailingKey() {
-
-        window.alert("Mailing success!\nPlease press finish to end the service.")
+    async mailingKey() {
+        var mailingKey = this.props.customerKey
+        var email = this.refs.email.value
+        
+        await axios.post('/customer/mailing', { 
+            mailingLockerID, mailingLockerSize, mailingCustomerName, mailingKey, email
+        })
+        // window.alert("Mailing success!\nPlease press finish to end the service.")
     }
 
     handleClickToHomepage() {

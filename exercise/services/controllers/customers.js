@@ -42,8 +42,12 @@ function mailing(req, res, report) {
     var mailOptions = {
         from: 'zafebox.coinlocker@gmail.com',
         to: req.body.email,
-        subject: 'Your key(Zafebox coin locker)',
-        html: ''
+        subject: 'Your locker details(Zafebox coin locker)',
+        html: '&nbsp;&nbsp;&nbsp;&nbsp;<b>ZafeBox coin locker</b><br/>'+
+            '&nbsp;&nbsp;&nbsp;&nbsp;Hello our customer '+req.body.mailingCustomerName+'.<br/>'+
+            '&nbsp;&nbsp;&nbsp;&nbsp;Your locker is locker number '+req.body.mailingLockerID+
+            ' size "'+req.body.mailingLockerSize+'".<br/>'+'**Your key for unlock the locker is "'+
+            req.body.mailingKey+'".**'
     }
           
     transporter.sendMail(mailOptions, function(err, info){
