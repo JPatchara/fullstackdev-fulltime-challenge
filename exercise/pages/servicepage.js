@@ -31,7 +31,7 @@ class Servicepage extends Component {
             this.setState({lockerStatus: currentStatus})
         })
         .catch(function (error) {
-            console.log(error);
+            console.log(error)
         })
     }
 

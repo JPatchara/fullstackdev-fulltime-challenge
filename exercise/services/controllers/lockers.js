@@ -11,7 +11,13 @@ function listAll(req, res, report) {
 //Get all lockers status
 function status(req, res, report) {
     lockerData.find({}, 'selected').sort( { lockerID: 1 } ).then(function(selectedStatus) {
-            res.send(selectedStatus)
+        res.send(selectedStatus)
+    }).catch(report)
+}
+//Get a locker data by locker id
+function getOne(req, res, report) {
+    lockerData.find({lockerID: req.params.id}).then(function(details) {
+        res.send(details)
     }).catch(report)
 }
 //Add a locker data
@@ -37,4 +43,4 @@ function remove(req, res, report) {
     }).catch(report)
 }
 
-module.exports = { listAll, create, edit, remove, status }
+module.exports = { listAll, create, edit, remove, status, getOne }

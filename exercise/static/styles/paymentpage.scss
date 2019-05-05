@@ -1,0 +1,28 @@
+[class="paymentContent"] {
+    margin: 0;
+    position: relative;
+    width: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(78, 76, 76);
+    border-radius: 3vmin;
+}
+[class="paymentHead"] {
+    position: absolute;
+    transform: translate(25vw,17vh);
+    color: rgb(78, 76, 76);
+    font-weight: bold;
+    font-size: 9vmin;
+}
+[id="title"] {
+    font-size: 2.5vmin;
+    padding: 0;
+}
+[id="total"] {
+    background-color: transparent;
+    border-style: none;
+    width: 12vw;
+    text-align: center;
+    color: orange;
+}
