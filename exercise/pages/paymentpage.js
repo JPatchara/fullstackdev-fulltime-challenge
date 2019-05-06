@@ -3,22 +3,30 @@ import Layout from '../components/layout'
 import '../static/styles/paymentpage.scss'
 import axios from 'axios'
 import CurrencyInput from 'react-currency-input'
+import { customerCharge, serviceTime } from './checkoutpage'
 
+// var serviceTime = 60
+// var customerCharge = 50
 class Paymentpage extends Component {
 
     constructor(props) {
         super(props)
         this.state = {
-            hour: 0,
-            minute: 0,
-            totalPrice: 0,
+            serviceHour: 0,
             billsNcoins: [],
             totalChange: 0,
             numCoins: 0,
             numBills: 0,
             bills: [],
-            coins: []
+            coins: [],
+            submit: false
         }
+    }
+
+    componentDidMount() {
+        //time information handle (minute to hour converting)
+        this.setState({ serviceHour: serviceTime/60 })
+
     }
 
     amountToChange(amount, change) {
@@ -35,20 +43,23 @@ class Paymentpage extends Component {
         }
     }
 
-    changesCalculate() {
-        var paid = this.refs.paid.value
-        var totalPrice = 0
-        var changes, numCoins, numBills = 0
-        var cash, bill, coin = []
+    async changesCalculate() {
+        var paid = this.refs.paid.getMaskedValue().replace(/,(?=\d{3})/g, '')
+        var changes = 0
+        var numCoins = 0
+        var numBills = 0
+        var cash = []
+        var bill = []
+        var coin = []
         
-        if(paid < totalPrice) {
+        if(paid < customerCharge) {
             window.alert("Please put more money for the payment.")
         } else {
             // find the total change
-            this.setState({totalChange: paid - totalPrice})
-            changes = paid - totalPrice
+            await this.setState({totalChange: paid - customerCharge})
+            changes = paid - customerCharge
             // find number of bills and coins for the change
-            this.setState({billsNcoins: this.amountToChange(this.state.totalChange, [1000, 500, 100, 50, 20, 10, 5, 2, 1])})
+            await this.setState({billsNcoins: this.amountToChange(this.state.totalChange, [1000, 500, 100, 50, 20, 10, 5, 2, 1])})
             cash = this.amountToChange(changes, [1000, 500, 100, 50, 20, 10, 5, 2, 1])
 
             for(let i = 0; i < cash.length; i++) {
@@ -64,10 +75,11 @@ class Paymentpage extends Component {
                     } else { bill[numBills] = ", "+cash[i] }
                 }
             }
-            this.setState({numCoins: numCoins, numBills: numBills, bills: bill, coins: coin })
+            await this.setState({numCoins: numCoins, numBills: numBills, bills: bill, coins: coin })
+            await console.log("Total change is "+this.state.totalChange+"\nThere are "+this.state.numBills+" bills and "+this.state.numCoins+" coins\n"+this.state.bills+"/"+this.state.coins)
         }
 
-        if(paid >= totalPrice) {
+        if(paid >= customerCharge) {
             this.setState({ submit: true })
         } else {
             window.alert("Please put more money for the payment.")
@@ -82,17 +94,17 @@ class Paymentpage extends Component {
                     <div className="mx-auto w-100 p-3 text-center px-4">
                         <p className="text-white" id="title">
                             You've been use our service for
-                            &nbsp;&nbsp;{this.state.hour}&nbsp;&nbsp; hr.
-                            &nbsp;&nbsp;{this.state.minute}&nbsp;&nbsp; min.
+                            &nbsp;&nbsp;{this.state.serviceHour}&nbsp;&nbsp; hr.<br/>(charge by an hour)
                         </p>
                         <p className="text-white" id="title">
                             Total price is 
-                            <CurrencyInput id="total" readOnly thousandSeparator="," value={this.state.totalPrice}/> 
+                            <CurrencyInput id="total" readOnly thousandSeparator="," value={customerCharge}/> 
                             Bath.
                         </p>
                         <p className="text-white" id="title">Insert money for the payment:</p>
-                        <CurrencyInput thousandSeparator="," prefix="฿" ref="paid"/><br/>
-                        <button className="btn btn-primary w-25 mt-4" onClick={() => this.keySubmit()}>Submit</button>
+                        <label className="text-white mr-2">฿</label>
+                        <CurrencyInput thousandSeparator="," ref="paid" precision="0"/><br/>
+                        <button className="btn btn-primary w-25 mt-4" onClick={() => this.changesCalculate()}>Submit</button>
                     </div>
                 </div>
             </Layout>

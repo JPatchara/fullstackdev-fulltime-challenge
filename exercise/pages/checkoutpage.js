@@ -32,6 +32,7 @@ class Checkoutpage extends Component {
         var diffTime = (this.state.startTime.getTime() - endTime.getTime()) / 1000 //convert time to seconds
         diffTime /= 60 //convert seconds to minutes
         var totalTime = Math.abs(Math.round(diffTime))
+        serviceTime = totalTime //set total time for using in showing details for customer
 
         if(this.state.lockerNum === 1 || this.state.lockerNum === 4 || this.state.lockerNum === 7 || this.state.lockerNum === 10) {
             firstCharge = 50
