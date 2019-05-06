@@ -3,10 +3,11 @@ import Layout from '../components/layout'
 import '../static/styles/paymentpage.scss'
 import axios from 'axios'
 import CurrencyInput from 'react-currency-input'
-import { customerCharge, serviceTime } from './checkoutpage'
+// import { customerCharge, serviceTime } from './checkoutpage'
+import Receipt from './sections/receipt';
 
-// var serviceTime = 60
-// var customerCharge = 50
+var serviceTime = 60
+var customerCharge = 50
 class Paymentpage extends Component {
 
     constructor(props) {
@@ -19,6 +20,7 @@ class Paymentpage extends Component {
             numBills: 0,
             bills: [],
             coins: [],
+            cash: 0,
             submit: false
         }
     }
@@ -45,6 +47,7 @@ class Paymentpage extends Component {
 
     async changesCalculate() {
         var paid = this.refs.paid.getMaskedValue().replace(/,(?=\d{3})/g, '')
+        this.setState({ cash: paid})
         var changes = 0
         var numCoins = 0
         var numBills = 0
@@ -92,21 +95,26 @@ class Paymentpage extends Component {
                 <p className="paymentHead">Payment Process</p>
                 <div className="paymentContent">
                     <div className="mx-auto w-100 p-3 text-center px-4">
-                        <p className="text-white" id="title">
+                        <p className="text-primary" id="title">
                             You've been use our service for
                             &nbsp;&nbsp;{this.state.serviceHour}&nbsp;&nbsp; hr.<br/>(charge by an hour)
-                        </p>
+                        </p><br/>
                         <p className="text-white" id="title">
                             Total price is 
                             <CurrencyInput id="total" readOnly thousandSeparator="," value={customerCharge}/> 
                             Bath.
-                        </p>
+                        </p><hr/>
                         <p className="text-white" id="title">Insert money for the payment:</p>
-                        <label className="text-white mr-2">฿</label>
+                        <label className="text-warning mr-2">฿</label>
                         <CurrencyInput thousandSeparator="," ref="paid" precision="0"/><br/>
                         <button className="btn btn-primary w-25 mt-4" onClick={() => this.changesCalculate()}>Submit</button>
                     </div>
                 </div>
+                <Receipt show={this.state.submit} changes={this.state.totalChange}
+                    numBills={this.state.numBills} numCoins={this.state.numCoins}
+                    bills={this.state.bills} coins={this.state.coins}
+                    total={customerCharge} cash={this.state.cash}
+                />
             </Layout>
         )
     }

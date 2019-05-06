@@ -64,5 +64,40 @@ function mailing(req, res, report) {
         }
     })
 }
+//Mailing a receipt to a customer
+function getReceipt(req, res, report) {
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'zafebox.coinlocker@gmail.com',
+            pass: 'zafebox@556'
+        }
+    })
 
-module.exports = { listAll, create, edit, remove, mailing, getOne }
+    var mailOptions = {
+        from: 'zafebox.coinlocker@gmail.com',
+        to: req.body.email,
+        subject: 'Receipt [ZafeBox coin locker]',
+        html: '&nbsp;&nbsp;&nbsp;&nbsp;<b>Receipt [ZafeBox coin locker]</b><br/><br/>'+
+            '&nbsp;&nbsp;&nbsp;&nbsp;Charge: '+req.body.total+' Baht.<br/>'+
+            '&nbsp;&nbsp;&nbsp;&nbsp;Cash: '+req.body.cash+' Baht.<br/>'+
+            '&nbsp;&nbsp;&nbsp;&nbsp;Refund Cash: '+req.body.refund+' Baht.<br/><br/>'+
+            '&nbsp;&nbsp;&nbsp;&nbsp;===Bills and coins for changes===<br/>'+
+            '&nbsp;&nbsp;&nbsp;&nbsp;You will get '+req.body.numBills+' bills.<br/>'+
+            '&nbsp;&nbsp;&nbsp;&nbsp;[ '+req.body.bills+' ]<br/>'+
+            '&nbsp;&nbsp;&nbsp;&nbsp;You will get '+req.body.numCoins+' coins.<br/>'+
+            '&nbsp;&nbsp;&nbsp;&nbsp;[ '+req.body.coins+' ]<br/><br/>'+
+            '&nbsp;&nbsp;&nbsp;&nbsp;<b>Thank you to use our service,</b><br/>'+
+            '&nbsp;&nbsp;&nbsp;&nbsp;<b>Patchara Chukiatkajohn (ZafeBox Owner).</b><br/>'
+    }
+          
+    transporter.sendMail(mailOptions, function(err, info){
+        if (err) {
+            console.log(err);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    })
+}
+
+module.exports = { listAll, create, edit, remove, mailing, getOne, getReceipt }
