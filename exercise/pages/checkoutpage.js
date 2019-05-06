@@ -4,24 +4,67 @@ import '../static/styles/checkoutpage.scss'
 import axios from 'axios'
 import Router from 'next/router'
 
+export var customerCharge
+export var serviceTime
 class Checkoutpage extends Component {
 
     constructor(props) {
         super(props)
         this.state = { 
             lockerNum: null,
-            customerName: ''
+            customerName: '',
+            customerKey: '',
+            startTime: null,
+            totalCharge: 0
         }
     }
 
-    keySubmit() {
-        
-        Router.push({ pathname: '/paymentpage'})
+    chargeCalculate() {
+        //Charge calculate with different size of locker
+        //Locker (1,4,7,10 size is S), (2,5,8,11 size is M), (3,6,9,12 size is L)
+        var firstCharge = 0 //Declare first 60 minute charge
+        var nextCharge = firstCharge/2 //Next minutes charge
+
+        //Get service end-time
+        var today = new Date()
+        today.setHours(today.getHours() + 7) //Thailand GMT+7 set up for local time
+        var endTime = today.toString()
+        var diffTime = (this.state.startTime.getTime() - endTime.getTime()) / 1000 //convert time to seconds
+        diffTime /= 60 //convert seconds to minutes
+        var totalTime = Math.abs(Math.round(diffTime))
+
+        if(this.state.lockerNum === 1 || this.state.lockerNum === 4 || this.state.lockerNum === 7 || this.state.lockerNum === 10) {
+            firstCharge = 50
+        } else if(this.state.lockerNum === 2 || this.state.lockerNum === 5 || this.state.lockerNum === 8 || this.state.lockerNum === 11) {
+            firstCharge = 100
+        } else if(this.state.lockerNum === 3 || this.state.lockerNum === 6 || this.state.lockerNum === 9 || this.state.lockerNum === 12) {
+            firstCharge = 200
+        }
+
+        if (totalTime < 60) {
+            this.setState({ totalCharge: firstCharge })
+        } else if (totalTime > 60) {
+            var nextHours = (totalTime / 60) - 1 //Get next hours counting time
+            this.setState({ totalCharge: firstCharge+(nextHours * nextCharge) })
+        }
+
+        customerCharge = this.state.totalCharge //Keep value to global variable for a next process
+    }
+
+    async keySubmit() {
+        //key checking before the payment
+        if( this.refs.key.value === this.state.customerKey) {
+
+            await Router.push({ pathname: '/paymentpage'})
+        } else {
+            window.alert("Incorrect Key!\nPlease enter the key again.")
+        }
     }
 
     async idPicker() {
-        var lockerData = []
+        var lockerData, lockerDetails, details, startDate, name, theKey = []
         await this.setState({ lockerNum: this.refs.num.value })
+        //Get customer name of that locker
         await axios.get('/locker/get/'+this.refs.num.value)
         .then(response => {
             console.log(response.data)
@@ -34,6 +77,30 @@ class Checkoutpage extends Component {
         .catch(function (error) {
             console.log(error)
         })
+        //Get customer key for checking entered key
+        await axios.get('/customer/get/'+this.refs.num.value)
+        .then(response => {
+            lockerDetails = response.data
+            lockerDetails.forEach(function(object, i) {
+                theKey = object.lockerKey
+            })
+            this.setState({ customerKey: theKey})
+        }).catch(function (error) {
+            console.log(error)
+        })
+        await console.log(this.state.customerKey)
+        //Get service start time of the customer for charge calculate
+        await axios.get('/locker/get/'+this.refs.num.value)
+        .then(response => {
+            details = response.data
+            details.forEach(function(object, i) {
+                startDate = object.startTime
+            })
+            this.setState({ startTime: startDate})
+        }).catch(function (error) {
+            console.log(error)
+        })
+        await console.log(this.state.startTime)
     }
 
     render() {
@@ -62,7 +129,7 @@ class Checkoutpage extends Component {
                             <div className="form-group row">
                                 <label className="col-sm-2 col-form-label text-white mr-2" id="title">Key:</label>
                                 <div className="col-sm-8 ml-4">
-                                    <input type="password" className="form-control" id="inputPassword" placeholder="Type your key here"/>
+                                    <input type="password" className="form-control" id="inputPassword" placeholder="Type your key here" ref="key"/>
                                 </div>
                             </div>
                         </div>

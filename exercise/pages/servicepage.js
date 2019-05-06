@@ -37,9 +37,12 @@ class Servicepage extends Component {
 
     async lockerSelected(lockerNum, lockerSize) {
         if (this.state.lockerStatus[lockerNum] === false) {
-            var date = new Date().toLocaleString("en-US", {timeZone: "Asia/Bangkok"})
-            date = new Date(date)
-            await this.setState({timestamp: date.getTime()})
+            //time setting
+            var today = new Date()
+            today.setHours(today.getHours() + 7) //Thailand GMT+7 set up for local time
+            var date = today.toString()
+
+            await this.setState({ timestamp: date })
             await console.log(this.state.timestamp)
 
             await this.setState({ access: true })

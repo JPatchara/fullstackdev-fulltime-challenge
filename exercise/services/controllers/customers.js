@@ -9,6 +9,12 @@ function listAll(req, res, report) {
         res.json(err.message)
     })
 }
+//Get a customer data by id
+function getOne(req, res, report) {
+    customerData.find({lockerID: req.params.id}).then(function(details) {
+        res.send(details)
+    }).catch(report)
+}
 //Add a customer data
 function create(req, res, report) {
     customerData.create(req.body).then(function(details) {
@@ -59,4 +65,4 @@ function mailing(req, res, report) {
     })
 }
 
-module.exports = { listAll, create, edit, remove, mailing }
+module.exports = { listAll, create, edit, remove, mailing, getOne }
