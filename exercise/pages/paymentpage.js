@@ -3,11 +3,11 @@ import Layout from '../components/layout'
 import '../static/styles/paymentpage.scss'
 import axios from 'axios'
 import CurrencyInput from 'react-currency-input'
-// import { customerCharge, serviceTime } from './checkoutpage'
+import { customerCharge, serviceTime } from './checkoutpage'
 import Receipt from './sections/receipt';
 
-var serviceTime = 60
-var customerCharge = 50
+// var serviceTime = 60
+// var customerCharge = 50
 class Paymentpage extends Component {
 
     constructor(props) {

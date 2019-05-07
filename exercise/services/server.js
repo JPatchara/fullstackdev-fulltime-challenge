@@ -10,9 +10,18 @@ const PORT = process.env.PORT || 3000
 const nextApp = next({ dev })
 const handle = nextApp.getRequestHandler()
 
+//----Express server app and socket.io set up
+const server = express() //create express application
+const socketIO = require('socket.io')
+
+//----db handle with mongoose----//
+const mongoose = require('mongoose')
+const connectionURL = 'mongodb+srv://JPatchara:Jin0835795068@coinlocker-ogp6o.mongodb.net/coinlockerDB'
+mongoose.set('useFindAndModify', false)
+mongoose.connect(connectionURL, {useNewUrlParser: true})
+
 //----server starting handle----//
 nextApp.prepare().then(() => {
-    const server = express() //create express application
     const lockerRoutes = require('./routes/lockers')
     const customerRoutes = require('./routes/customers')
     
@@ -24,13 +33,32 @@ nextApp.prepare().then(() => {
     server.use('/locker', lockerRoutes) 
     server.use('/customer', customerRoutes)
 
+    //handling request from the server
     server.get('*', (req, res) => {
         return handle(req, res)
     })
     
-    server.listen(PORT, (err) => {
+    const app = server.listen(PORT, (err) => {
         if (err) throw err
         console.log('> Ready on http://localhost:${PORT}')
+    })
+
+    //----socket.io handle----//
+    const io = socketIO.listen(app)
+
+    io.on('connection', client => {
+        //response when client connect
+        console.log('service connected')
+      
+        //response when client disconnect
+        client.on('disconnect', () => {
+            console.log('service disconnected')
+        })
+
+        client.on('selected-locker', function (lockerNum) {
+            io.sockets.emit('taken', lockerNum)
+            console.log('selected-locker = '+ lockerNum)
+        })
     })
 
 }).catch((ex) => {
@@ -38,15 +66,8 @@ nextApp.prepare().then(() => {
     process.exit(1)
 })
 
-//----db handle with mongoose----//
-const mongoose = require('mongoose')
-const connectionURL = 'mongodb+srv://JPatchara:Jin0835795068@coinlocker-ogp6o.mongodb.net/coinlockerDB'
-
-mongoose.connect(connectionURL, {useNewUrlParser: true})
-var connection = mongoose.connection
-mongoose.set('useFindAndModify', false)
-
 //db status checking
+var connection = mongoose.connection
 connection.on('connected', function() {
     console.log('connected to coinlocker db')
 })
@@ -62,4 +83,6 @@ process.on('SIGINT', function() {
         process.exit(0)
     })
 })
+
+module.exports = server
 module.exports = connection
