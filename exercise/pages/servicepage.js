@@ -81,9 +81,19 @@ class Servicepage extends Component {
         }
     }
 
-    closeLocker() {
-        this.setState({ access: false })
+    async closeLocker() {
+        await this.setState({ access: false })
         //axios put method for wipe out the locker info
+        await axios.put(
+            '/locker/update/'+this.state.locker,
+            { selected: this.state.access, startTime: null, status: "available" },
+            { headers: { 'Content-Type': 'application/json' } }
+        ).then(response => { 
+            console.log(response)
+        })
+        .catch(error => {
+            console.log(error.response)
+        })
     }
 
     infoResponse() {
