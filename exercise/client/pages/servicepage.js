@@ -91,22 +91,41 @@ class Servicepage extends Component {
             { headers: { 'Content-Type': 'application/json' } }
         ).then(response => {
             console.log(response)
-            if (this.state.lockerStatus[this.state.locker] === true) {
-                return 'red'
-            } else {
-                return 'rgba($color: #15a5e7e0, $alpha: 0.55)'
-            }
         })
         .catch(error => {
             console.log(error.response)
         })
+
+        const socket = socketIOClient(this.state.endpoint) //socket.io client handle
+        await socket.emit('selected-locker', this.state.locker)
+        var statusList = []
+
+        await socket.on('taken', function(lockerNum){
+            //update infomation from all lockers status
+            console.log(lockerNum)
+            axios.get('/locker/getStatus')
+            .then(status => {
+                statusList = status.data
+                statusList.forEach(function(object, i) {
+                    currentStatus[i+1] = object.selected
+                })
+                this.setState({lockerStatus: currentStatus})
+                if (this.state.lockerStatus[lockerNum] === true) {
+                    return 'red'
+                } else {
+                    return 'rgba($color: #15a5e7e0, $alpha: 0.55)'
+                }
+            })
+            .catch(function (error) {
+                console.log(error)
+            })
+        }.bind(this))
     }
 
     infoResponse() {
         const socket = socketIOClient(this.state.endpoint) //socket.io client handle
         var statusList = []
         socket.on('taken', function(lockerNum){
-            // this.lockerStatusDetection(lockerNum) //real time locker color change
             //update infomation from all lockers status
             console.log(lockerNum)
             axios.get('/locker/getStatus')
