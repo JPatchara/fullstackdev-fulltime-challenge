@@ -89,8 +89,13 @@ class Servicepage extends Component {
             '/locker/update/'+this.state.locker,
             { selected: this.state.access, startTime: null, status: "available" },
             { headers: { 'Content-Type': 'application/json' } }
-        ).then(response => { 
+        ).then(response => {
             console.log(response)
+            if (this.state.lockerStatus[this.state.locker] === true) {
+                return 'red'
+            } else {
+                return 'rgba($color: #15a5e7e0, $alpha: 0.55)'
+            }
         })
         .catch(error => {
             console.log(error.response)
