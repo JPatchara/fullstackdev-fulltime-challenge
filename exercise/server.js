@@ -21,8 +21,8 @@ mongoose.connect(connectionURL, {useNewUrlParser: true})
 
 //----server starting handle----//
 nextApp.prepare().then(() => {
-    const lockerRoutes = require('./server/routes/lockers')
-    const customerRoutes = require('./server/routes/customers')
+    const lockerRoutes = require('./services/routes/lockers')
+    const customerRoutes = require('./services/routes/customers')
     
     server.use(cors({ origin: true }))
     server.use(bodyParser.json()) //support json encoded body
