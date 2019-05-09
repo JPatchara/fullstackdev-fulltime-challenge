@@ -1,0 +1,17 @@
+{
+    "name": "client",
+    "version": "1.0.0",
+    "description": "coin locker system for IGEARGEEK job applying",
+    "author": "Patchara Chukiatkajohn(Jin)",
+    "license": "ISC",
+    "dependencies": {
+        "react": "^16.8.6",
+        "react-dom": "^16.8.6",
+        "next": "^8.1.0"
+    },
+    "scripts": {
+        "prestart": "next build",
+        "build": "next build",
+        "start": "next start -p ${PORT}"
+    }
+}

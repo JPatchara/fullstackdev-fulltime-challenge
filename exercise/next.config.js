@@ -4,7 +4,7 @@ const withImages = require('next-images')
 module.exports = withImages(
     withSass({
         sassLoaderOptions: {
-            includePaths: ['./static/styles/']
+            includePaths: ['./client/static/styles/']
         },
         cssModules: true,
         cssLoaderOptions: {

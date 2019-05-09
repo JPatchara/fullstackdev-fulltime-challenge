@@ -2,17 +2,16 @@
 const express = require('express')
 const next = require('next')
 const cors = require('cors')
+const socketIO = require('socket.io')
 const bodyParser = require('body-parser')
+const server = express() //create express application
+const path = require('path')
 
 //----setting up development environment----//
 const dev = process.env.NODE_ENV !== 'production'
 const PORT = process.env.PORT || 3000
 const nextApp = next({ dev })
 const handle = nextApp.getRequestHandler()
-
-//----Express server app and socket.io set up
-const server = express() //create express application
-const socketIO = require('socket.io')
 
 //----db handle with mongoose----//
 const mongoose = require('mongoose')
@@ -25,7 +24,7 @@ nextApp.prepare().then(() => {
     const lockerRoutes = require('./routes/lockers')
     const customerRoutes = require('./routes/customers')
     
-    server.use(cors())
+    server.use(cors({ origin: true }))
     server.use(bodyParser.json()) //support json encoded body
     server.use(bodyParser.urlencoded({ extended: true })) //support urlencoded body
 
@@ -38,7 +37,7 @@ nextApp.prepare().then(() => {
         return handle(req, res)
     })
     
-    const app = server.listen(PORT, (err) => {
+    const app = server.listen(process.env.PORT || PORT, (err) => {
         if (err) throw err
         console.log('> Ready on http://localhost:${PORT}')
     })
@@ -84,5 +83,4 @@ process.on('SIGINT', function() {
     })
 })
 
-module.exports = server
-module.exports = connection
+module.exports = { nextApp, server, connection }
