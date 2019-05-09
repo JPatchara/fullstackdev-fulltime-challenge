@@ -17,7 +17,8 @@ class Servicepage extends Component {
             locker: 0,
             size: '',
             lockerStatus: [],
-            endpoint: "http://localhost:3000" // connect to realtime server url
+            endpoint: "https://zafebox-coinlocker.herokuapp.com/" // connect to realtime server url in production
+            // endpoint: "http://localhost:3000" // connect to realtime server url in local
         }
         this.infoResponse = this.infoResponse.bind(this)
         this.lockerStatusDetection = this.lockerStatusDetection.bind(this)
