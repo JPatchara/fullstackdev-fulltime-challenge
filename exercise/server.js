@@ -10,7 +10,7 @@ const path = require('path')
 //----setting up development environment----//
 const dev = process.env.NODE_ENV !== 'production'
 const PORT = process.env.PORT || 3000
-const nextApp = next({ dev })
+const nextApp = next({  dir: './client' }, dev)
 const handle = nextApp.getRequestHandler()
 
 //----db handle with mongoose----//
@@ -21,8 +21,8 @@ mongoose.connect(connectionURL, {useNewUrlParser: true})
 
 //----server starting handle----//
 nextApp.prepare().then(() => {
-    const lockerRoutes = require('./routes/lockers')
-    const customerRoutes = require('./routes/customers')
+    const lockerRoutes = require('./server/routes/lockers')
+    const customerRoutes = require('./server/routes/customers')
     
     server.use(cors({ origin: true }))
     server.use(bodyParser.json()) //support json encoded body
@@ -35,6 +35,11 @@ nextApp.prepare().then(() => {
     //handling request from the server
     server.get('*', (req, res) => {
         return handle(req, res)
+    })
+
+    server.use(express.static(path.join(__dirname, "client", "build")))
+    server.get("*", (req, res) => {
+        res.sendFile(path.join(__dirname, "client", "build", "index.html"));
     })
     
     const app = server.listen(process.env.PORT || PORT, (err) => {
