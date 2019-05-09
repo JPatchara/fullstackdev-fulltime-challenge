@@ -14,6 +14,9 @@ const Layout = (props) => (
             />
         </Head>
         <Header/>
+        <ul className="circles">
+            <li/><li/><li/><li/><li/><li/><li/><li/><li/><li/><li/><li/>
+        </ul>
         {props.children}
     </div>
 )

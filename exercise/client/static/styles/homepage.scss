@@ -26,7 +26,8 @@
     margin-left: 14.5vw;
 }
 [id="optionsPart"] {
-    transform: translate(0, -8vh);
+    right: -2vw;
+    bottom: 6vh;
     height: 35vh;
     background-color: rgba($color: #2f89c5b0, $alpha: .4);
     border-radius: 3vmin 0vmin 22vmin 3vmin;
@@ -53,10 +54,3 @@
     position: relative;
     transform: translate(-15vw, 38vh);
 }
-// [class="namingTitle"] {
-//     transform: translate(3vw, 5vh);
-// }
-// [class="namingTitle"] span {
-//     font-size: 3vmin;
-//     font-style: bold;
-// }
