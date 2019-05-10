@@ -5,8 +5,8 @@ import Locker from './sections/locker'
 import axios from 'axios'
 import socketIOClient from 'socket.io-client'
 
-var url = 'http://localhost:3000'
 var currentStatus = []
+
 class Servicepage extends Component {
 
     constructor(props) {
@@ -17,11 +17,12 @@ class Servicepage extends Component {
             locker: 0,
             size: '',
             lockerStatus: [],
-            endpoint: "https://zafebox-coinlocker.herokuapp.com/" // connect to realtime server url in production
-            // endpoint: "http://localhost:3000" // connect to realtime server url in local
+            // endpoint: "https://zafebox-coinlocker.herokuapp.com/" // connect to realtime server url in production
+            endpoint: "http://localhost:3000" // connect to realtime server url in local
         }
         this.infoResponse = this.infoResponse.bind(this)
         this.lockerStatusDetection = this.lockerStatusDetection.bind(this)
+        this.closeLocker = this.closeLocker.bind(this)
     }
 
     async componentDidMount() {
@@ -39,7 +40,7 @@ class Servicepage extends Component {
             console.log(error)
         })
 
-        this.infoResponse()
+        await this.infoResponse()
     }
 
     async lockerSelected(lockerNum, lockerSize) {
@@ -58,7 +59,7 @@ class Servicepage extends Component {
 
             const socket = socketIOClient(this.state.endpoint) //socket.io client handle
             await socket.emit('selected-locker', this.state.locker)
-            
+
             await axios.put(
                 '/locker/update/'+lockerNum,
                 { selected: this.state.access, startTime: this.state.timestamp, status: "taken" },
@@ -75,19 +76,27 @@ class Servicepage extends Component {
     }
 
     lockerStatusDetection(lockerNum) {
-        if (this.state.lockerStatus[lockerNum] === true) {
-            return 'red'
-        } else {
-            return 'rgba($color: #15a5e7e0, $alpha: 0.55)'
+        if (this.state.lockerStatus[lockerNum] === false) {
+            return 'rgba(26, 187, 17, 0.58)'
+        }
+        else if (this.state.lockerStatus[lockerNum] === true) {
+            return 'rgba(187, 17, 17, 0.58)'
+        } 
+        else {
+            return 'rgba(26, 187, 17, 0.58)'
         }
     }
 
     async closeLocker() {
         await this.setState({ access: false })
+
+        const socket = socketIOClient(this.state.endpoint) //socket.io client handle
+        await socket.emit('selected-locker', this.state.locker)
+
         //axios put method for wipe out the locker info
         await axios.put(
             '/locker/update/'+this.state.locker,
-            { selected: this.state.access, startTime: null, status: "available" },
+            { selected: false, startTime: null, status: "available" },
             { headers: { 'Content-Type': 'application/json' } }
         ).then(response => {
             console.log(response)
@@ -96,10 +105,12 @@ class Servicepage extends Component {
             console.log(error.response)
         })
 
-        const socket = socketIOClient(this.state.endpoint) //socket.io client handle
         await socket.emit('selected-locker', this.state.locker)
-        var statusList = []
+    }
 
+    async infoResponse() {
+        const socket = socketIOClient(this.state.endpoint) //socket.io client handle
+        var statusList = []
         await socket.on('taken', function(lockerNum){
             //update infomation from all lockers status
             console.log(lockerNum)
@@ -110,41 +121,13 @@ class Servicepage extends Component {
                     currentStatus[i+1] = object.selected
                 })
                 this.setState({lockerStatus: currentStatus})
-                if (this.state.lockerStatus[lockerNum] === true) {
-                    return 'red'
-                } else {
-                    return 'rgba($color: #15a5e7e0, $alpha: 0.55)'
-                }
+                console.log(this.state.lockerStatus)
             })
             .catch(function (error) {
                 console.log(error)
             })
         }.bind(this))
-    }
-
-    infoResponse() {
-        const socket = socketIOClient(this.state.endpoint) //socket.io client handle
-        var statusList = []
-        socket.on('taken', function(lockerNum){
-            //update infomation from all lockers status
-            console.log(lockerNum)
-            axios.get('/locker/getStatus')
-            .then(status => {
-                statusList = status.data
-                statusList.forEach(function(object, i) {
-                    currentStatus[i+1] = object.selected
-                })
-                this.setState({lockerStatus: currentStatus})
-                if (this.state.lockerStatus[lockerNum] === true) {
-                    return 'red'
-                } else {
-                    return 'rgba($color: #15a5e7e0, $alpha: 0.55)'
-                }
-            })
-            .catch(function (error) {
-                console.log(error)
-            })
-        }.bind(this))
+        await this.setState({lockerStatus})
     }
 
     render() {
