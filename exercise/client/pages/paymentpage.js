@@ -3,11 +3,9 @@ import Layout from '../components/layout'
 import '../static/styles/paymentpage.scss'
 import axios from 'axios'
 import CurrencyInput from 'react-currency-input'
-import { customerCharge, serviceTime } from './checkoutpage'
+import { customerCharge, serviceTime, lockerID } from './checkoutpage'
 import Receipt from './sections/receipt';
 
-// var serviceTime = 60
-// var customerCharge = 50
 class Paymentpage extends Component {
 
     constructor(props) {
@@ -27,7 +25,11 @@ class Paymentpage extends Component {
 
     componentDidMount() {
         //time information handle (minute to hour converting)
-        this.setState({ serviceHour: serviceTime/60 })
+        if (serviceTime < 60) {
+            this.setState({ serviceHour: 1 })
+        } else if(serviceTime%60 !== 0){
+            this.setState({ serviceHour: Math.round((serviceTime/60)+1) })
+        }
 
     }
 
@@ -87,6 +89,18 @@ class Paymentpage extends Component {
         } else {
             window.alert("Please put more money for the payment.")
         }
+
+        //axios put method for reset the locker
+        await axios.put(
+            '/locker/update/'+lockerID,
+            { selected: false, startTime: null, status: "available" },
+            { headers: { 'Content-Type': 'application/json' } }
+        ).then(response => {
+            console.log(response)
+        })
+        .catch(error => {
+            console.log(error.response)
+        })
     }
 
     render() {

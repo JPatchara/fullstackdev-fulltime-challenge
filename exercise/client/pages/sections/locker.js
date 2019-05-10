@@ -35,7 +35,7 @@ class Locker extends React.Component {
         await this.setState({ customerKey: this.randomCustomerKey(8) })
         await this.setState({ getKey: true })
 
-        //create customer data to a database
+        //create customer data to a customer collection in database
         await axios.post('/customer/create', {
             customer: this.state.customerName,
             lockerID: this.props.locker,
@@ -48,11 +48,22 @@ class Locker extends React.Component {
         .catch(function (error) {
             console.log(error)
         })
+        //create customer data to a locker collection in database
+        await axios.put('/locker/update/'+this.props.locker, {
+            customer: this.state.customerName,
+        })
+        .then(function (response) {
+            console.log(response)
+        })
+        .catch(function (error) {
+            console.log(error)
+        })
 
         //set data for mailing part
         mailingLockerID = this.props.locker
         mailingLockerSize = this.props.size
         mailingCustomerName = this.refs.name.value
+
     }
 
     render() {

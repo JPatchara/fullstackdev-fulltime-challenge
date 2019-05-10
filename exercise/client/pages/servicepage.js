@@ -47,10 +47,10 @@ class Servicepage extends Component {
         if (this.state.lockerStatus[lockerNum] === false) {
             //time setting
             var today = new Date()
-            today.setHours(today.getHours() + 7) //Thailand GMT+7 set up for local time
+            // today.setHours(today.getHours() + 7) //Thailand GMT+7 set up for local time
             var date = today.toString()
 
-            await this.setState({ timestamp: date })
+            await this.setState({ timestamp: new Date(date) })
             await console.log(this.state.timestamp)
 
             await this.setState({ access: true })
@@ -75,6 +75,7 @@ class Servicepage extends Component {
         }
     }
 
+    //locker color changing due to the status from all customer
     lockerStatusDetection(lockerNum) {
         if (this.state.lockerStatus[lockerNum] === false) {
             return 'rgba(26, 187, 17, 0.58)'

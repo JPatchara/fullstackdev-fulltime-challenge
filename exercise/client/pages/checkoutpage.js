@@ -6,6 +6,7 @@ import Router from 'next/router'
 
 export var customerCharge
 export var serviceTime
+export var lockerID
 class Checkoutpage extends Component {
 
     constructor(props) {
@@ -17,36 +18,53 @@ class Checkoutpage extends Component {
             startTime: null,
             totalCharge: 0
         }
+        this.chargeCalculate = this.chargeCalculate.bind(this)
     }
 
     chargeCalculate() {
         //Charge calculate with different size of locker
         //Locker (1,4,7,10 size is S), (2,5,8,11 size is M), (3,6,9,12 size is L)
-        var firstCharge = 0 //Declare first 60 minute charge
-        var nextCharge = firstCharge/2 //Next minutes charge
+        var firstCharge = 0 //first 60 minute charge
 
         //Get service end-time
         var today = new Date()
-        today.setHours(today.getHours() + 7) //Thailand GMT+7 set up for local time
         var endTime = today.toString()
-        var diffTime = (this.state.startTime.getTime() - endTime.getTime()) / 1000 //convert time to seconds
-        diffTime /= 60 //convert seconds to minutes
-        var totalTime = Math.abs(Math.round(diffTime))
-        serviceTime = totalTime //set total time for using in showing details for customer
 
-        if(this.state.lockerNum === 1 || this.state.lockerNum === 4 || this.state.lockerNum === 7 || this.state.lockerNum === 10) {
+        //set the service start time of customer
+        var customerStartDate = new Date(this.state.startTime)
+        var customerStartTime = customerStartDate.toString()
+
+        var diffTime = Math.abs((new Date(customerStartTime).getTime() - new Date(endTime).getTime()) / 60000)//convert time to minutes
+        var totalTime = Math.floor(diffTime)//correct total time from two dates to minutes calculation
+
+        //set total time for using in showing details for customer
+        if (totalTime < 60) {
+            serviceTime = 60 //for less than or equal an hour condition
+        } else {
+            serviceTime = totalTime //for more than an hour condition
+        }
+
+        //detect the locker size of each locker
+        if(this.state.lockerNum === '1' || this.state.lockerNum === '4' || this.state.lockerNum === '7' || this.state.lockerNum === '10') {
             firstCharge = 50
-        } else if(this.state.lockerNum === 2 || this.state.lockerNum === 5 || this.state.lockerNum === 8 || this.state.lockerNum === 11) {
+        } else if(this.state.lockerNum === '2' || this.state.lockerNum === '5' || this.state.lockerNum === '8' || this.state.lockerNum === '11') {
             firstCharge = 100
-        } else if(this.state.lockerNum === 3 || this.state.lockerNum === 6 || this.state.lockerNum === 9 || this.state.lockerNum === 12) {
+        } else if(this.state.lockerNum === '3' || this.state.lockerNum === '6' || this.state.lockerNum === '9' || this.state.lockerNum === '12') {
             firstCharge = 200
         }
 
-        if (totalTime < 60) {
+        //customer charge from time & price calculation 
+        if (totalTime <= 60) {
             this.setState({ totalCharge: firstCharge })
         } else if (totalTime > 60) {
-            var nextHours = (totalTime / 60) - 1 //Get next hours counting time
-            this.setState({ totalCharge: firstCharge+(nextHours * nextCharge) })
+            //Get next hours counting time
+            if(totalTime%60 !== 0) {
+                var nextHours = Math.round(totalTime / 60) //for extra minutes to charge for one more hour
+            } else {
+                var nextHours = Math.round((totalTime / 60) - 1) //for normal case that don't have extra minutes
+            }
+            var nextCharge = firstCharge/2 //next hour charge
+            this.setState({ totalCharge: firstCharge+(nextHours * nextCharge) })//set total charge of a customer from calculation
         }
 
         customerCharge = this.state.totalCharge //Keep value to global variable for a next process
@@ -55,7 +73,6 @@ class Checkoutpage extends Component {
     async keySubmit() {
         //key checking before the payment
         if( this.refs.key.value === this.state.customerKey) {
-
             await Router.push({ pathname: '/paymentpage'})
         } else {
             window.alert("Incorrect Key!\nPlease enter the key again.")
@@ -65,6 +82,7 @@ class Checkoutpage extends Component {
     async idPicker() {
         var lockerData, lockerDetails, details, startDate, name, theKey = []
         await this.setState({ lockerNum: this.refs.num.value })
+        lockerID = this.refs.num.value //set selected locker id to use in another process
         //Get customer name of that locker
         await axios.get('/locker/get/'+this.refs.num.value)
         .then(response => {
@@ -89,7 +107,7 @@ class Checkoutpage extends Component {
         }).catch(function (error) {
             console.log(error)
         })
-        await console.log(this.state.customerKey)
+
         //Get service start time of the customer for charge calculate
         await axios.get('/locker/get/'+this.refs.num.value)
         .then(response => {
@@ -101,7 +119,9 @@ class Checkoutpage extends Component {
         }).catch(function (error) {
             console.log(error)
         })
-        await console.log(this.state.startTime)
+
+        //get customer charge from selected locker id
+        await this.chargeCalculate()
     }
 
     render() {

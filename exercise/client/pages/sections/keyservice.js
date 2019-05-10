@@ -17,7 +17,7 @@ class Keyservice extends React.Component {
         await axios.post('/customer/mailing', { 
             mailingLockerID, mailingLockerSize, mailingCustomerName, mailingKey, email
         })
-        // window.alert("Mailing success!\nPlease press finish to end the service.")
+        await window.alert("Mailing success!\nPlease press finish to end the service.")
     }
 
     handleClickToHomepage() {
