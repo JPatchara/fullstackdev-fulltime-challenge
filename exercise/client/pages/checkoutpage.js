@@ -146,7 +146,7 @@ class Checkoutpage extends Component {
                             <div className="form-group row">
                                 <label className="col-sm-2 col-form-label text-white" id="title">Customer:</label>
                                 <div className="col-sm-8 ml-4">
-                                &nbsp;&nbsp;<input type="text" readOnly className="form-control-plaintext text-white" value={this.state.customerName}/>
+                                    <input type="text" readOnly className="form-control-plaintext text-white ml-2" value={this.state.customerName}/>
                                 </div>
                             </div>
                             <div className="form-group row">
