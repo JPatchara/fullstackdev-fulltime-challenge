@@ -25,7 +25,7 @@ class Paymentpage extends Component {
 
     componentDidMount() {
         //time information handle (minute to hour converting)
-        if (serviceTime < 60) {
+        if (serviceTime <= 60) {
             this.setState({ serviceHour: 1 })
         } else if(serviceTime%60 !== 0){
             this.setState({ serviceHour: Math.round((serviceTime/60)+1) })
@@ -93,7 +93,7 @@ class Paymentpage extends Component {
         //axios put method for reset the locker
         await axios.put(
             '/locker/update/'+lockerID,
-            { selected: false, startTime: null, status: "available" },
+            { selected: false, startTime: null, status: 'available', customer: '' },
             { headers: { 'Content-Type': 'application/json' } }
         ).then(response => {
             console.log(response)
