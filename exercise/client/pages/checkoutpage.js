@@ -4,9 +4,10 @@ import '../static/styles/checkoutpage.scss'
 import axios from 'axios'
 import Router from 'next/router'
 
+export var lockerID
 export var customerCharge
 export var serviceTime
-export var lockerID
+export var checkoutTime
 class Checkoutpage extends Component {
 
     constructor(props) {
@@ -29,6 +30,7 @@ class Checkoutpage extends Component {
         //Get service end-time
         var today = new Date()
         var endTime = today.toString()
+        checkoutTime = endTime
 
         //set the service start time of customer
         var customerStartDate = new Date(this.state.startTime)

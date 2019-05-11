@@ -4,7 +4,8 @@ const customerModel = new mongoose.Schema({
     customer: { type: String },
     lockerID: { type: String },
     lockerKey: { type: String },
-    checkout: { type: Boolean }
+    checkout: { type: Boolean },
+    checkoutTime: { type: Date }
 },{
     collection: 'customers'  
 })

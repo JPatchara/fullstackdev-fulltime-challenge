@@ -23,11 +23,13 @@ function create(req, res, report) {
 }
 //Update a customer data
 function edit(req, res, report) {
-    customerData.findByIdAndUpdate({_id: req.params.id}, req.body).then(function() {
-        customerData.findOne({_id: req.params.id}).then(function(details) {
-            res.send(details)
-        }).catch(report)
-    }).catch(report)
+    customerData.findOneAndUpdate({lockerID: req.params.id}, req.body, {upsert:false}, function(err, doc){
+        if (err) {
+            return res.send(500, { error: err })
+        } else {
+            return res.send(doc)
+        }
+    })
 }
 //Delete a customer data
 function remove(req, res, report) {

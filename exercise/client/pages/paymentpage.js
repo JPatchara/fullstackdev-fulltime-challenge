@@ -3,7 +3,7 @@ import Layout from '../components/layout'
 import '../static/styles/paymentpage.scss'
 import axios from 'axios'
 import CurrencyInput from 'react-currency-input'
-import { customerCharge, serviceTime, lockerID } from './checkoutpage'
+import { customerCharge, serviceTime, checkoutTime, lockerID } from './checkoutpage'
 import Receipt from './sections/receipt';
 
 class Paymentpage extends Component {
@@ -94,6 +94,18 @@ class Paymentpage extends Component {
         await axios.put(
             '/locker/update/'+lockerID,
             { selected: false, startTime: null, status: "available" },
+            { headers: { 'Content-Type': 'application/json' } }
+        ).then(response => {
+            console.log(response)
+        })
+        .catch(error => {
+            console.log(error.response)
+        })
+
+        //axios put method for seting got item back status
+        await axios.put(
+            '/customer/update/'+lockerID,
+            { lockerID: lockerID+'(old)', checkout: true, checkoutTime: new Date(checkoutTime) },
             { headers: { 'Content-Type': 'application/json' } }
         ).then(response => {
             console.log(response)
